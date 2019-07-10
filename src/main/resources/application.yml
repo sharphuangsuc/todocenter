@@ -1,0 +1,13 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://sr-dev-mysql-master-1.gz.cvte.cn:3306/todo_center
+    username: sharphuang
+    password: sharphuang
+
+mybatis:
+  type-aliases-package: com.cvte.todocenter.bean
+  mapper-locations: classpath:/mappers/*.xml

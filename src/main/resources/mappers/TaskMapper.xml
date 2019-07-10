@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cvte.todocenter.mapper.TaskMapper">
+
+    <resultMap id="partTaskMap" type="com.cvte.todocenter.bean.Task">
+        <id column="task_id" property="task_id"/>
+        <result column="task_name" property="task_name"/>
+        <result column="deadline" property="deadline"/>
+    </resultMap>
+
+    <insert id="insertTask" parameterType="com.cvte.todocenter.bean.Task">
+        insert into task(task_id,task_name,deadline,is_delete)
+        values (#{task_id},#{task_name},#{deadline},#{is_delete})
+    </insert>
+
+    <select id="selectAll" resultMap="partTaskMap">
+        select task_id,task_name,deadline from task
+        where is_delete!=1
+    </select>
+
+    <update id="deleteTaskById" parameterType="int">
+        update task set is_delete=1
+        where task_id=#{task_id}
+    </update>
+    
+    <select id="selectTaskById" parameterType="int" resultType="com.cvte.todocenter.bean.Task">
+        select task_id,task_name,deadline from task
+        where task_id=#{task_id} and is_delete!=1
+    </select>
+    
+    <update id="updateTaskById" parameterType="int">
+        update task set
+        task_name=#{task_name}
+        deadline=#{deadline}
+        is_delete=#{is_delete}
+        where task_id=#{task_id}
+    </update>
+    
+</mapper>
