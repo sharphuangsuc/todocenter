@@ -1,5 +1,7 @@
 package com.cvte.todocenter.service;
 
+import com.cvte.todocenter.bean.Task;
+import com.cvte.todocenter.bean.Team;
 import com.cvte.todocenter.bean.User;
 import com.cvte.todocenter.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +24,8 @@ public class UserService {
         userMapper.deleteUserById(user_id);
     }
 
-    public void updateUserById(int user_id,User user){
-        userMapper.updateUserById(user_id,user);
+    public void updateUserById(User user){
+        userMapper.updateUserById(user);
     }
 
     public User getUserById(int user_id)
@@ -33,5 +35,29 @@ public class UserService {
 
     public List<User> getAllTask(){
         return userMapper.selectAll();
+    }
+
+    public List<User> selectUserByName(String user_name){
+        return userMapper.selectUserByName(user_name);
+    }
+
+    public List<User> selectAllDelUser()
+    {
+        return userMapper.selectAllDelUser();
+    }
+
+    public void delBatch(List<Integer> delList)
+    {
+        userMapper.batchDeleteUser(delList);
+    }
+
+    public List<Team> getUserTeamById(int user_id)
+    {
+        return userMapper.selectAllUserTeam(user_id);
+    }
+
+    public List<Task> getUserTaskById(int user_id)
+    {
+        return userMapper.selectAllUserTask(user_id);
     }
 }

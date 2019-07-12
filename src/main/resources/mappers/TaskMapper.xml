@@ -9,8 +9,8 @@
     </resultMap>
 
     <insert id="insertTask" parameterType="com.cvte.todocenter.bean.Task">
-        insert into task(task_id,task_name,deadline,is_delete)
-        values (#{task_id},#{task_name},#{deadline},#{is_delete})
+        insert into task(task_name,deadline,is_delete)
+        values (#{task_name},#{deadline},0)
     </insert>
 
     <select id="selectAll" resultMap="partTaskMap">
@@ -28,12 +28,60 @@
         where task_id=#{task_id} and is_delete!=1
     </select>
     
-    <update id="updateTaskById" parameterType="int">
-        update task set
-        task_name=#{task_name}
-        deadline=#{deadline}
-        is_delete=#{is_delete}
+    <update id="updateTaskById" parameterType="com.cvte.todocenter.bean.Task">
+        update task
+        <set>
+        <if test="task_name!=null">
+        task_name=#{task_name},
+        </if>
+        <if test="deadline!=null">
+        deadline=#{deadline},
+        </if>
+        <if test="is_delete!=null">
+        is_delete=#{is_delete},
+        </if>
+        </set>
         where task_id=#{task_id}
     </update>
+
+    <select id="selectTaskByName" parameterType="java.lang.String" resultType="com.cvte.todocenter.bean.Task">
+        select task_id,task_name,deadline from task
+        where task_name=#{task_name} and is_delete!=1
+    </select>
+
+    <select id="selectAllDelTask" resultType="com.cvte.todocenter.bean.Task">
+        select task_id,task_name,deadline from task
+        where is_delete=1
+    </select>
+
+    <update id="batchDeleteTask" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" separator=";">
+            update task
+            <set>
+                is_delete=1
+            </set>
+            where task_id=${item}
+        </foreach>
+    </update>
+
+    <insert id="insertTaskUser" parameterType="java.util.List">
+        insert into user_task(user_id,task_id,is_delete)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.user_id},#{item.task_id},0)
+        </foreach>
+    </insert>
+
+    <update id="deleteTaskUserById" parameterType="int">
+        update user_task set is_delete=1
+        where user_id=#{user_id} and task_id=#{task_id}
+    </update>
+
+    <select id="selectAllTaskUser" resultType="com.cvte.todocenter.bean.User" parameterType="int">
+        select user_id,user_name,email
+        from user
+        where user_id in
+        (select user_id from user_task where task_id=#{task_id})
+    </select>
     
 </mapper>
