@@ -5,6 +5,7 @@ import com.cvte.todocenter.bean.User;
 import com.cvte.todocenter.bean.UserTeam;
 import com.cvte.todocenter.service.TeamService;
 import com.cvte.todocenter.service.TimeService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +18,8 @@ public class TeamController {
     @Autowired
     private TeamService teamService;
 
-    //private TimeService timeService;
-    //private TimeController timeController;
+    @Autowired
+    private TimeService timeService;
 
     //获取所有团队
     @RequestMapping("/getAll")
@@ -30,40 +31,50 @@ public class TeamController {
     //添加团队
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     @ResponseBody
-    public void addTeam(Team team)
+    public void addTeam(@Param("team") Team team)
     {
+        TimeController timeController=new TimeController();
+        Timestamp lastOpeTime=timeController.getTime();
+        String operation="add new team";
+        team.setLastOpeTime(lastOpeTime);
+        team.setOperation(operation);
         teamService.addTeam(team);
-        //int team_id=team.getTeam_id();
-        //Timestamp last_ope_time=timeController.getTime();
-        //timeService.updateTeamTime(last_ope_time,team_id);
     }
 
     //删除团队
     @RequestMapping(value = "/del",method = {RequestMethod.POST})
-    public void delTeamById(@RequestParam int team_id)
+    public void delTeamById(@RequestParam int teamId)
     {
-        teamService.delTeamById(team_id);
+        TimeController timeController=new TimeController();
+        Timestamp lastOpeTime=timeController.getTime();
+        String operation="delete the team";
+        teamService.delTeamById(teamId,lastOpeTime,operation);
     }
 
     //修改团队信息
     @RequestMapping(value = "/update",method = RequestMethod.POST)
     public void update(Team team)
     {
+        TimeController timeController=new TimeController();
+        Timestamp lastOpeTime=timeController.getTime();
+        String operation="update the team";
+        team.setLastOpeTime(lastOpeTime);
+        team.setOperation(operation);
         teamService.updateTeamById(team);
     }
 
     //根据团队id获取团队
     @RequestMapping("/getById")
-    public Team getTeamById(@RequestParam int team_id)
+    public Team getTeamById(@RequestParam int teamId)
     {
-        return teamService.getTeamById(team_id);
+        return teamService.getTeamById(teamId);
     }
 
     //根据团队名获取团队
     @RequestMapping("/getByName")
-    public List<Team> getTeamByName(@RequestParam String team_name)
+    public List<Team> getTeamByName(@RequestParam String teamName)
     {
-        return teamService.selectTeamByName(team_name);
+        return teamService.selectTeamByName(teamName);
     }
 
     //获取所有已删除团队
@@ -77,7 +88,11 @@ public class TeamController {
     @RequestMapping("/delBatch")
     public void delBatch(@RequestParam List<Integer> delList)
     {
-        teamService.delBatch(delList);
+        TimeController timeController=new TimeController();
+        Timestamp lastOpeTime=timeController.getTime();
+        String operation="delete the team";
+        teamService.delBatch(delList,lastOpeTime,operation);
+
     }
 
     //为团队指派用户
@@ -89,15 +104,16 @@ public class TeamController {
 
     //剔除团队成员
     @RequestMapping(value = "/delUserTeam",method = {RequestMethod.POST})
-    public void delTeamUser(@RequestParam int team_id,@RequestParam int user_id)
+    public void delTeamUser(@RequestParam int teamId,@RequestParam int userId)
     {
-        teamService.delTeamUser(team_id,user_id);
+        teamService.delTeamUser(teamId,userId);
     }
 
     //获取团队所有成员
     @RequestMapping("/getTeamUser")
-    public List<User> getTeamUserById(@RequestParam int team_id)
+    public List<User> getTeamUserById(@RequestParam int teamId)
     {
-        return teamService.getTeamUserById(team_id);
+        return teamService.getTeamUserById(teamId);
     }
+
 }

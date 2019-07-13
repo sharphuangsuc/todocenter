@@ -13,15 +13,15 @@ import java.util.List;
 public interface TaskMapper {
     void insertTask(Task task);
 
-    void deleteTaskById(int task_id);
+    void deleteTaskById(int taskId);
 
     void updateTaskById(Task task);
 
-    Task selectTaskById(int task_id);
+    Task selectTaskById(int taskId);
 
     List<Task> selectAll();
 
-    List<Task> selectTaskByName(String task_name);
+    List<Task> selectTaskByName(String taskName);
 
     List<Task> selectAllDelTask();
 
@@ -29,8 +29,8 @@ public interface TaskMapper {
 
     void insertTaskUser(List<UserTask> addUserList);
 
-    void deleteTaskUserById(int task_id,int user_id);
+    void deleteTaskUserById(int taskId,int userId);
 
-    List<User> selectAllTaskUser(int task_id);
+    List<User> selectAllTaskUser(int taskId);
 
 }

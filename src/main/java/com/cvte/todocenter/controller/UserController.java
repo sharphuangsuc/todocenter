@@ -18,8 +18,8 @@ public class UserController {
 
     //获取所有用户
     @RequestMapping("/getAll")
-    public List<User> getAllTask(){
-        List<User> list=userService.getAllTask();
+    public List<User> getAllUser(){
+        List<User> list=userService.getAllUser();
         return list;
     }
 
@@ -33,9 +33,9 @@ public class UserController {
 
     //删除用户
     @RequestMapping(value = "/del",method = {RequestMethod.POST})
-    public void delUserById(@RequestParam int user_id)
+    public void delUserById(@RequestParam int userId)
     {
-        userService.delUserById(user_id);
+        userService.delUserById(userId);
     }
 
     //修改用户信息
@@ -47,16 +47,16 @@ public class UserController {
 
     //根据id获取用户
     @RequestMapping("/getById")
-    public User getUserById(@RequestParam int user_id)
+    public User getUserById(@RequestParam int userId)
     {
-        return userService.getUserById(user_id);
+        return userService.getUserById(userId);
     }
 
     //根据用户名获取用户
     @RequestMapping("/getByName")
-    public List<User> getUserByName(@RequestParam String user_name)
+    public List<User> getUserByName(@RequestParam String userName)
     {
-        return userService.selectUserByName(user_name);
+        return userService.selectUserByName(userName);
     }
 
     //获取所有已删除用户
@@ -75,15 +75,15 @@ public class UserController {
 
     //获取用户所在团队
     @RequestMapping("/getTeamUser")
-    public List<Team> getUserTeamById(@RequestParam int user_id)
+    public List<Team> getUserTeamById(@RequestParam int userId)
     {
-        return userService.getUserTeamById(user_id);
+        return userService.getUserTeamById(userId);
     }
 
     //获取用户所在团队
     @RequestMapping("/getTaskUser")
-    public List<Task> getUserTaskById(@RequestParam int user_id)
+    public List<Task> getUserTaskById(@RequestParam int userId)
     {
-        return userService.getUserTaskById(user_id);
+        return userService.getUserTaskById(userId);
     }
 }

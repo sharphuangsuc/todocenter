@@ -7,6 +7,7 @@ import com.cvte.todocenter.mapper.TeamMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -19,26 +20,26 @@ public class TeamService {
         teamMapper.insertTeam(team);
     }
 
-    public void delTeamById(int team_id)
+    public void delTeamById(int teamId, Timestamp lastOpeTime, String operation)
     {
-        teamMapper.deleteTeamById(team_id);
+        teamMapper.deleteTeamById(teamId,lastOpeTime,operation);
     }
 
     public void updateTeamById(Team team){
         teamMapper.updateTeamById(team);
     }
 
-    public Team getTeamById(int team_id)
+    public Team getTeamById(int teamId)
     {
-        return teamMapper.selectTeamById(team_id);
+        return teamMapper.selectTeamById(teamId);
     }
 
     public List<Team> getAllTeam(){
         return teamMapper.selectAll();
     }
 
-    public List<Team> selectTeamByName(String team_name){
-        return teamMapper.selectTeamByName(team_name);
+    public List<Team> selectTeamByName(String teamName){
+        return teamMapper.selectTeamByName(teamName);
     }
 
     public List<Team> selectAllDelTeam()
@@ -46,9 +47,9 @@ public class TeamService {
         return teamMapper.selectAllDelTeam();
     }
 
-    public void delBatch(List<Integer> delList)
+    public void delBatch(List<Integer> delList, Timestamp lastOpeTime, String operation)
     {
-        teamMapper.batchDeleteTeam(delList);
+        teamMapper.batchDeleteTeam(delList,lastOpeTime,operation);
     }
 
     public void addTeamUser(List<UserTeam> addUserList)
@@ -56,13 +57,13 @@ public class TeamService {
         teamMapper.insertTeamUser(addUserList);
     }
 
-    public void delTeamUser(int team_id,int user_id)
+    public void delTeamUser(int teamId,int userId)
     {
-        teamMapper.deleteTeamUserById(team_id,user_id);
+        teamMapper.deleteTeamUserById(teamId,userId);
     }
 
-    public List<User> getTeamUserById(int team_id)
+    public List<User> getTeamUserById(int teamId)
     {
-        return teamMapper.selectAllTeamUser(team_id);
+        return teamMapper.selectAllTeamUser(teamId);
     }
 }

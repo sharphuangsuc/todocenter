@@ -19,26 +19,26 @@ public class UserService {
         userMapper.insertUser(user);
     }
 
-    public void delUserById(int user_id)
+    public void delUserById(int userId)
     {
-        userMapper.deleteUserById(user_id);
+        userMapper.deleteUserById(userId);
     }
 
     public void updateUserById(User user){
         userMapper.updateUserById(user);
     }
 
-    public User getUserById(int user_id)
+    public User getUserById(int userId)
     {
-        return userMapper.selectUserById(user_id);
+        return userMapper.selectUserById(userId);
     }
 
-    public List<User> getAllTask(){
+    public List<User> getAllUser(){
         return userMapper.selectAll();
     }
 
-    public List<User> selectUserByName(String user_name){
-        return userMapper.selectUserByName(user_name);
+    public List<User> selectUserByName(String userName){
+        return userMapper.selectUserByName(userName);
     }
 
     public List<User> selectAllDelUser()
@@ -51,13 +51,13 @@ public class UserService {
         userMapper.batchDeleteUser(delList);
     }
 
-    public List<Team> getUserTeamById(int user_id)
+    public List<Team> getUserTeamById(int userId)
     {
-        return userMapper.selectAllUserTeam(user_id);
+        return userMapper.selectAllUserTeam(userId);
     }
 
-    public List<Task> getUserTaskById(int user_id)
+    public List<Task> getUserTaskById(int userId)
     {
-        return userMapper.selectAllUserTask(user_id);
+        return userMapper.selectAllUserTask(userId);
     }
 }

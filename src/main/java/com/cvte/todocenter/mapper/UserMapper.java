@@ -14,22 +14,22 @@ public interface UserMapper {
 
     void insertUser(User user);
 
-    void deleteUserById(int user_id);
+    void deleteUserById(int userId);
 
     void updateUserById(User user);
 
-    User selectUserById(int user_id);
+    User selectUserById(int userId);
 
     List<User> selectAll();
 
-    List<User> selectUserByName(String user_name);
+    List<User> selectUserByName(String userName);
 
     List<User> selectAllDelUser();
 
     void batchDeleteUser(List<Integer> delList);
 
-    List<Team> selectAllUserTeam(int user_id);
+    List<Team> selectAllUserTeam(int userId);
 
-    List<Task> selectAllUserTask(int user_id);
+    List<Task> selectAllUserTask(int userId);
 
 }

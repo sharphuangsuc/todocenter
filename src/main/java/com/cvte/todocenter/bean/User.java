@@ -2,25 +2,25 @@ package com.cvte.todocenter.bean;
 
 public class User {
 
-    private int user_id;
-    private String user_name;
+    private int userId;
+    private String userName;
     private String email;
-    private int is_delete;
+    private int isDelete;
 
-    public int getUser_id() {
-        return user_id;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public String getUser_name() {
-        return user_name;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUser_name(String user_name) {
-        this.user_name = user_name;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getEmail() {
@@ -31,11 +31,11 @@ public class User {
         this.email = email;
     }
 
-    public int getIs_delete() {
-        return is_delete;
+    public int getIsDelete() {
+        return isDelete;
     }
 
-    public void setIs_delete(int is_delete) {
-        this.is_delete = is_delete;
+    public void setIsDelete(int isDelete) {
+        this.isDelete = isDelete;
     }
 }

@@ -6,6 +6,7 @@ import com.cvte.todocenter.bean.UserTask;
 import com.cvte.todocenter.mapper.TaskMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +25,9 @@ public class TaskService {
         taskMapper.insertTask(task);
     }
 
-    public void delTaskById(int task_id)
+    public void delTaskById(int taskId)
     {
-        taskMapper.deleteTaskById(task_id);
+        taskMapper.deleteTaskById(taskId);
     }
 
     public void updateTaskById(Task task)
@@ -34,13 +35,13 @@ public class TaskService {
         taskMapper.updateTaskById(task);
     }
 
-    public Task getTaskById(int task_id)
+    public Task getTaskById(int taskId)
     {
-        return taskMapper.selectTaskById(task_id);
+        return taskMapper.selectTaskById(taskId);
     }
 
-    public List<Task> selectTaskByName(String task_name){
-        return taskMapper.selectTaskByName(task_name);
+    public List<Task> selectTaskByName(String taskName){
+        return taskMapper.selectTaskByName(taskName);
     }
 
     public List<Task> selectAllDelTask()
@@ -58,13 +59,13 @@ public class TaskService {
         taskMapper.insertTaskUser(addUserList);
     }
 
-    public void delTaskUser(int task_id,int user_id)
+    public void delTaskUser(int task_id,int userId)
     {
-        taskMapper.deleteTaskUserById(task_id,user_id);
+        taskMapper.deleteTaskUserById(task_id,userId);
     }
 
-    public List<User> getTaskUserById(int task_id)
+    public List<User> getTaskUserById(int taskId)
     {
-        return taskMapper.selectAllTaskUser(task_id);
+        return taskMapper.selectAllTaskUser(taskId);
     }
 }

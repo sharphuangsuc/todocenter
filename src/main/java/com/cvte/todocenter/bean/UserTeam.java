@@ -2,9 +2,9 @@ package com.cvte.todocenter.bean;
 
 public class UserTeam {
     private int id;
-    private int user_id;
-    private int team_id;
-    private int is_delete;
+    private int userId;
+    private int teamId;
+    private int isDelete;
 
     public int getId() {
         return id;
@@ -14,27 +14,27 @@ public class UserTeam {
         this.id = id;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public int getTeam_id() {
-        return team_id;
+    public int getTeamId() {
+        return teamId;
     }
 
-    public void setTeam_id(int team_id) {
-        this.team_id = team_id;
+    public void setTeamId(int teamId) {
+        this.teamId = teamId;
     }
 
-    public int getIs_delete() {
-        return is_delete;
+    public int getIsDelete() {
+        return isDelete;
     }
 
-    public void setIs_delete(int is_delete) {
-        this.is_delete = is_delete;
+    public void setIsDelete(int isDelete) {
+        this.isDelete = isDelete;
     }
 }

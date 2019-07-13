@@ -1,32 +1,53 @@
 package com.cvte.todocenter.bean;
 
+import java.sql.Timestamp;
+
 public class Team {
 
-    private int team_id;
-    private String team_name;
-    private int is_delete;
+    private int teamId;
+    private String teamName;
+    private int isDelete;
+    private Timestamp lastOpeTime;
+    private String operation;
 
-    public int getTeam_id() {
-        return team_id;
+    public String getOperation() {
+        return operation;
     }
 
-    public void setTeam_id(int team_id) {
-        this.team_id = team_id;
+    public void setOperation(String operation) {
+        this.operation = operation;
     }
 
-    public String getTeam_name() {
-        return team_name;
+    public Timestamp getLastOpeTime() {
+        return lastOpeTime;
     }
 
-    public void setTeam_name(String team_name) {
-        this.team_name = team_name;
+    public void setLastOpeTime(Timestamp lastOpeTime) {
+        this.lastOpeTime = lastOpeTime;
     }
 
-    public int getIs_delete() {
-        return is_delete;
+
+    public int getTeamId() {
+        return teamId;
     }
 
-    public void setIs_delete(int is_delete) {
-        this.is_delete = is_delete;
+    public void setTeamId(int team_id) {
+        this.teamId = team_id;
+    }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
+    }
+
+    public int getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(int isDelete) {
+        this.isDelete = isDelete;
     }
 }

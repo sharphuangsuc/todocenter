@@ -2,8 +2,8 @@ package com.cvte.todocenter.bean;
 
 public class UserTask {
     private int id;
-    private int user_id;
-    private int task_id;
+    private int userId;
+    private int taskId;
 
     public int getId() {
         return id;
@@ -13,20 +13,20 @@ public class UserTask {
         this.id = id;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public int getTask_id() {
-        return task_id;
+    public int getTaskId() {
+        return taskId;
     }
 
-    public void setTask_id(int task_id) {
-        this.task_id = task_id;
+    public void setTaskId(int taskId) {
+        this.taskId = taskId;
     }
 
     public int getIs_delete() {

@@ -4,21 +4,21 @@ package com.cvte.todocenter.bean;
 import java.sql.Date;
 
 public class Task {
-    private int task_id;
-    private String task_name;
+    private int taskId;
+    private String taskName;
     private Date deadline;
-    private int is_delete;
+    private int isDelete;
 
-    public int getTask_id() {
-        return task_id;
+    public int getTaskId() {
+        return taskId;
     }
 
-    public String getTask_name() {
-        return task_name;
+    public String getTaskName() {
+        return taskName;
     }
 
-    public void setTask_name(String task_name) {
-        this.task_name = task_name;
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
     }
 
     public Date getDeadline() {
@@ -29,21 +29,21 @@ public class Task {
         this.deadline = deadline;
     }
 
-    public int getIs_delete() {
-        return is_delete;
+    public int getIsDelete() {
+        return isDelete;
     }
 
-    public void setIs_delete(int is_delete) {
-        this.is_delete = is_delete;
+    public void setIsDelete(int isDelete) {
+        this.isDelete = isDelete;
     }
 
-    public void setTask_id(int task_id) {
-        this.task_id = task_id;
+    public void setTaskId(int taskId) {
+        this.taskId = taskId;
     }
 
     @Override
     public String toString(){
-        return "id"+this.task_id+" "+"task_name"+this.task_name+" "+"deadline"+this.deadline;
+        return "id"+this.taskId +" "+"taskName"+this.taskName +" "+"deadline"+this.deadline;
     }
 
 }
