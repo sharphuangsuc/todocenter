@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cvte.todocenter.mapper.TeamMapper">
 
-    <insert id="insertTeam" parameterType="com.cvte.todocenter.bean.Team">
-        insert into team(team_name,is_delete)
-        values (#{team_name},0)
+    <insert id="insertTeam" parameterType="com.cvte.todocenter.bean.Team" useGeneratedKeys="true" keyProperty="teamId">
+        insert into team(team_name,is_delete,last_ope_time,operation)
+        values (#{teamName},0,#{lastOpeTime},#{operation})
     </insert>
 
     <select id="selectAll" resultType="com.cvte.todocenter.bean.Team">
@@ -12,32 +12,32 @@
         where is_delete!=1
     </select>
 
-    <update id="deleteTeamById" parameterType="int">
-        update team set is_delete=1
-        where team_id=#{team_id}
+    <update id="deleteTeamById">
+        update team set is_delete=1,last_ope_time=#{lastOpeTime},operation=#{operation}
+        where team_id=#{teamId}
     </update>
 
     <select id="selectTeamById" parameterType="int" resultType="com.cvte.todocenter.bean.Team">
         select team_id,team_name from team
-        where team_id=#{team_id} and is_delete!=1
+        where team_id=#{teamId} and is_delete!=1
     </select>
 
     <update id="updateTeamById" parameterType="com.cvte.todocenter.bean.Team">
         update team
         <set>
-            <if test="team_name!=null">
-                team_name=#{team_name}
+            <if test="teamName!=null">
+                team_name=#{teamName}
             </if>
-            <if test="is_delete!=null">
-                is_delete=#{is_delete}
+            <if test="isDelete!=null">
+                is_delete=#{isDelete}
             </if>
-            where team_id=#{team_id}
+            where team_id=#{teamId}
         </set>
     </update>
 
     <select id="selectTeamByName" parameterType="java.lang.String" resultType="com.cvte.todocenter.bean.Team">
-        select team_id,team_name from team
-        where team_name=#{team_name} and is_delete!=1
+        select teamId,teamName from team
+        where team_name=#{teamName} and is_delete!=1
     </select>
 
     <select id="selectAllDelTeam" resultType="com.cvte.todocenter.bean.Team">
@@ -49,7 +49,7 @@
         <foreach collection="list" item="item" index="index" separator=";">
             update team
             <set>
-                is_delete=1
+                is_delete=1,last_ope_time=#{lastOpeTime},operation=#{operation}
             </set>
             where team_id=${item}
         </foreach>
@@ -59,20 +59,20 @@
         insert into user_team(user_id,team_id,is_delete)
         values
         <foreach collection="list" item="item" separator=",">
-             (#{item.user_id},#{item.team_id},0)
+             (#{item.userId},#{item.teamId},0)
         </foreach>
     </insert>
 
     <update id="deleteTeamUserById" parameterType="int">
-        update user_team set is_delete=1
-        where user_id=#{user_id} and team_id=#{team_id}
+        update user_team set isDelete=1
+        where userId=#{userId} and teamId=#{teamId}
     </update>
 
     <select id="selectAllTeamUser" resultType="com.cvte.todocenter.bean.User" parameterType="int">
-        select user_id,user_name,email
+        select userId,userName,email
         from user
-        where user_id in
-        (select user_id from user_team where team_id=#{team_id})
+        where userId in
+        (select userId from user_team where teamId=#{teamId})
     </select>
 
 </mapper>

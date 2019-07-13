@@ -4,7 +4,7 @@
 
     <insert id="insertUser" parameterType="com.cvte.todocenter.bean.User">
         insert into user(user_name,email,is_delete)
-        values (#{user_name},#{email},0)
+        values (#{userName},#{email},0)
     </insert>
 
     <select id="selectAll" resultType="com.cvte.todocenter.bean.User">
@@ -14,33 +14,33 @@
 
     <update id="deleteUserById" parameterType="int">
         update user set is_delete=1
-        where user_id=#{user_id}
+        where user_id=#{userId}
     </update>
 
     <select id="selectUserById" parameterType="int" resultType="com.cvte.todocenter.bean.User">
         select user_id,user_name,email from user
-        where user_id=#{user_id} and is_delete!=1
+        where user_id=#{userId} and is_delete!=1
     </select>
 
     <update id="updateUserById" parameterType="com.cvte.todocenter.bean.User">
         update user
         <set>
-        <if test="user_name!=null">
-        user_name=#{user_name}
+        <if test="userName!=null">
+        user_name=#{userName}
         </if>
         <if test="email!=null">
         email=#{email}
         </if>
-        <if test="is_delete!=null">
-        is_delete=#{is_delete}
+        <if test="isDelete!=null">
+        is_delete=#{isDelete}
         </if>
-        where user_id=#{user_id}
+        where user_id=#{userId}
         </set>
     </update>
 
     <select id="selectUserByName" parameterType="java.lang.String" resultType="com.cvte.todocenter.bean.User">
         select user_id,user_name,email from user
-        where user_name=#{user_name} and is_delete!=1
+        where user_name=#{userName} and is_delete!=1
     </select>
 
     <select id="selectAllDelUser" resultType="com.cvte.todocenter.bean.User">
@@ -58,18 +58,18 @@
         </foreach>
     </update>
 
-    <select id="selectAllUserTeam" resultType="com.cvte.todocenter.bean.team" parameterType="int">
+    <select id="selectAllUserTeam" resultType="com.cvte.todocenter.bean.Team" parameterType="int">
         select team_id,team_name
         from team
         where team_id in
-        (select team_id from user_team where user_id=#{user_id})
+        (select team_id from user_team where user_id=#{userId})
     </select>
 
-    <select id="selectAllUserTask" resultType="com.cvte.todocenter.bean.task" parameterType="int">
+    <select id="selectAllUserTask" resultType="com.cvte.todocenter.bean.Task" parameterType="int">
         select task_id,task_name,deadline
         from task
         where task_id in
-        (select task_id from user_task where user_id=#{user_id})
+        (select task_id from user_task where user_id=#{userId})
     </select>
 
 

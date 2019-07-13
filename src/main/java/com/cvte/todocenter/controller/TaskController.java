@@ -3,7 +3,9 @@ package com.cvte.todocenter.controller;
 import com.cvte.todocenter.bean.Task;
 import com.cvte.todocenter.bean.User;
 import com.cvte.todocenter.bean.UserTask;
+import com.cvte.todocenter.service.Mail;
 import com.cvte.todocenter.service.TaskService;
+import com.cvte.todocenter.service.TimeService;
 import com.cvte.todocenter.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +15,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -24,8 +26,10 @@ public class TaskController {
 
     @Autowired
     private TaskService taskService;
+    //@Autowired
+    //private UserService userService;
     @Autowired
-    private UserService userService;
+    private TimeService timeService;
 
     //获取所有的任务
     @RequestMapping("/getAll")
@@ -39,14 +43,20 @@ public class TaskController {
     @ResponseBody
     public void addTask(Task task)
     {
+
         taskService.add(task);
+        int taskId=task.getTaskId();
+        TimeController timeController=new TimeController();
+        Timestamp lastOpeTime=timeController.getTime();
+        String operation="add new team";
+        timeService.updateTaskTime(lastOpeTime,taskId,operation);
     }
 
     //删除任务
     @RequestMapping(value = "/del",method = {RequestMethod.POST})
-    public void delTaskById(@RequestParam int task_id)
+    public void delTaskById(@RequestParam int taskId)
     {
-        taskService.delTaskById(task_id);
+        taskService.delTaskById(taskId);
     }
 
     //修改更新任务
@@ -58,16 +68,16 @@ public class TaskController {
 
     //通过任务id取得任务
     @RequestMapping("/getById")
-    public Task getTaskById(@RequestParam int task_id)
+    public Task getTaskById(@RequestParam int taskId)
     {
-        return taskService.getTaskById(task_id);
+        return taskService.getTaskById(taskId);
     }
 
     //通过任务名获取任务
     @RequestMapping("/getByName")
-    public List<Task> getTaskByName(@RequestParam String task_name)
+    public List<Task> getTaskByName(@RequestParam String taskName)
     {
-        return taskService.selectTaskByName(task_name);
+        return taskService.selectTaskByName(taskName);
     }
 
     //获取所有已删除任务
@@ -85,49 +95,52 @@ public class TaskController {
     }
 
     //为任务指派执行用户并发送邮件
-    public String sendEmailAccount="todocenter@cvte.com";
-    public String sendEmailPassword="123456";
-    public String sendEmailSMTPHost="smtp.cvte.com";
+    //public String sendEmailAccount="todocenter@cvte.com";
+    //public String sendEmailPassword="123456";
+    //public String sendEmailSMTPHost="smtp.cvte.com";
     @RequestMapping(value= "/addUser",method = RequestMethod.POST)
     public void addTaskUser(@RequestParam("addUserList") List<UserTask> addUserList)throws Exception
     {
         taskService.addTaskUser(addUserList);
-        InternetAddress[] internetAddresses=getAddress(addUserList);
-        String task_name=taskService.getTaskById(addUserList.get(0).getTask_id()).getTask_name();
-        sendMail(internetAddresses,task_name);
+        String text="被指派为任务成员";
+        Mail mail =new Mail();
+        InternetAddress[] internetAddresses=mail.getAddress(addUserList);
+        String taskName=taskService.getTaskById(addUserList.get(0).getTaskId()).getTaskName();
+        mail.sendMail(internetAddresses,taskName,text);
+        //sendMail(internetAddresses,taskName);
     }
 
     //撤除任务的执行人员
     @RequestMapping(value = "/delUserTask",method = {RequestMethod.POST})
-    public void delTaskUser(@RequestParam int task_id,@RequestParam int user_id)
+    public void delTaskUser(@RequestParam int taskId,@RequestParam int userId)
     {
-        taskService.delTaskUser(task_id,user_id);
+        taskService.delTaskUser(taskId,userId);
     }
 
     //获取任务的所有执行用户
     @RequestMapping("/getTaskUser")
-    public List<User> getTaskUserById(@RequestParam int task_id)
+    public List<User> getTaskUserById(@RequestParam int taskId)
     {
-        return taskService.getTaskUserById(task_id);
+        return taskService.getTaskUserById(taskId);
     }
 
     //获取邮件收件对象函数
-    public InternetAddress[] getAddress(List<UserTask> addUserList) throws IOException
+    /*public InternetAddress[] getAddress(List<UserTask> addUserList) throws IOException
     {
         InternetAddress[] internetAddressesList=new InternetAddress[addUserList.size()];
         for(int i=0;i<internetAddressesList.length;i++)
         {
-            int user_id=addUserList.get(i).getUser_id();
-            User user=userService.getUserById(user_id);
+            int userId=addUserList.get(i).getUserId();
+            User user=userService.getUserById(userId);
             String email=user.getEmail();
-            String user_name=user.getUser_name();
-            InternetAddress internetAddress=new InternetAddress(email,user_name,"UTF-8");
+            String userName=user.getUserName();
+            InternetAddress internetAddress=new InternetAddress(email,userName,"UTF-8");
             internetAddressesList[i]=internetAddress;
         }
         return  internetAddressesList;
     }
     //发送邮件函数
-    public void sendMail(InternetAddress[] internetAddresses,String task_name) throws Exception
+    public void sendMail(InternetAddress[] internetAddresses,String taskName) throws Exception
     {
         Properties properties=new Properties();
         properties.setProperty("mail.transport.protocol", "smtp");
@@ -135,14 +148,14 @@ public class TaskController {
         properties.setProperty("mail.smtp.auth", "true");
         Session session=Session.getInstance(properties);
         session.setDebug(true);
-        MimeMessage mimeMessage=createMimeMessage(session,sendEmailAccount,internetAddresses,task_name);
+        MimeMessage mimeMessage=createMimeMessage(session,sendEmailAccount,internetAddresses,taskName);
         Transport transport=session.getTransport();
         transport.connect(sendEmailAccount,sendEmailPassword);
         transport.sendMessage(mimeMessage,mimeMessage.getAllRecipients());
         transport.close();
     }
     //邮件创建函数
-    public  MimeMessage createMimeMessage(Session session, String sendMail, InternetAddress[] receiveMail,String task_name) throws Exception {
+    public  MimeMessage createMimeMessage(Session session, String sendMail, InternetAddress[] receiveMail,String taskName) throws Exception {
         // 1. 创建一封邮件
         MimeMessage message = new MimeMessage(session);
 
@@ -157,7 +170,7 @@ public class TaskController {
         message.setSubject("任务通知", "UTF-8");
 
         // 5. Content: 邮件正文（可以使用html标签）
-        message.setContent("您有一个新任务："+task_name, "text/html;charset=UTF-8");
+        message.setContent("您有一个新任务："+taskName, "text/html;charset=UTF-8");
         // 6. 设置发件时间
         message.setSentDate(new Date());
 
@@ -165,6 +178,6 @@ public class TaskController {
         message.saveChanges();
 
         return message;
-    }
+    }*/
 
 }
