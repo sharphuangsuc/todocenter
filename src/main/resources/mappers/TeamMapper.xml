@@ -31,6 +31,7 @@
             <if test="isDelete!=null">
                 is_delete=#{isDelete}
             </if>
+            last_ope_time=#{lastOpeTime},operation=#{operation}
             where team_id=#{teamId}
         </set>
     </update>

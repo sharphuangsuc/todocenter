@@ -19,7 +19,7 @@
     </select>
 
     <update id="deleteTaskById" parameterType="int">
-        update task set is_delete=1
+        update task set is_delete=1,last_ope_time=#{lastOpeTime},operation=#{operation}
         where task_id=#{taskId}
     </update>
     
@@ -40,6 +40,7 @@
         <if test="isDelete!=null">
         is_delete=#{isDelete},
         </if>
+            last_ope_time=#{lastOpeTime},operation=#{operation}
         </set>
         where task_id=#{taskId}
     </update>

@@ -8,10 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class TaskService {
 
     @Autowired
@@ -25,9 +27,9 @@ public class TaskService {
         taskMapper.insertTask(task);
     }
 
-    public void delTaskById(int taskId)
+    public void delTaskById(int taskId, Timestamp lastOpeTime, String operation)
     {
-        taskMapper.deleteTaskById(taskId);
+        taskMapper.deleteTaskById(taskId,lastOpeTime,operation);
     }
 
     public void updateTaskById(Task task)
@@ -49,9 +51,9 @@ public class TaskService {
         return taskMapper.selectAllDelTask();
     }
 
-    public void delBatch(List<Integer> delList)
+    public void delBatch(List<Integer> delList,Timestamp lastOpeTime, String operation)
     {
-        taskMapper.batchDeleteTask(delList);
+        taskMapper.batchDeleteTask(delList,lastOpeTime,operation);
     }
 
     public void addTaskUser(List<UserTask> addUserList)

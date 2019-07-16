@@ -4,9 +4,10 @@ import com.cvte.todocenter.bean.Team;
 import com.cvte.todocenter.bean.User;
 import com.cvte.todocenter.bean.UserTeam;
 import com.cvte.todocenter.service.TeamService;
-import com.cvte.todocenter.service.TimeService;
+import com.cvte.todocenter.service.UserService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -19,7 +20,7 @@ public class TeamController {
     private TeamService teamService;
 
     @Autowired
-    private TimeService timeService;
+    private UserService userService;
 
     //获取所有团队
     @RequestMapping("/getAll")
@@ -97,9 +98,21 @@ public class TeamController {
 
     //为团队指派用户
     @RequestMapping(value= "/addUser",method = RequestMethod.POST)
-    public void addTeamUser(@RequestParam("addUserList") List<UserTeam> addUserList)
+    @Transactional
+    public void addTeamUser(@RequestParam("addUserList") List<UserTeam> addUserList)throws Exception
     {
         teamService.addTeamUser(addUserList);
+        for(UserTeam userTeam:addUserList)
+        {
+            int userId=userTeam.getUserId();
+            int teamId=userTeam.getTeamId();
+            User user=userService.getUserById(userId);
+            Team team=teamService.getTeamById(teamId);
+            if(user==null||team==null||user.getIsDelete()==1||team.getIsDelete()==1)
+            {
+                throw new Exception("团队或者成员不存在");
+            }
+        }
     }
 
     //剔除团队成员
