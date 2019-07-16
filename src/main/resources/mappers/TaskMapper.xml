@@ -2,10 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cvte.todocenter.mapper.TaskMapper">
 
+    <resultMap id="userMap" type="com.cvte.todocenter.bean.User">
+        <id column="user_id" property="userId"/>
+        <result column="user_name" property="userName"/>
+        <result column="email" property="email"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="last_ope_time" property="lastOpeTime"/>
+        <result column="operation" property="operation"/>
+    </resultMap>
+
     <resultMap id="partTaskMap" type="com.cvte.todocenter.bean.Task">
         <id column="task_id" property="taskId"/>
         <result column="task_name" property="taskName"/>
         <result column="deadline" property="deadline"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="last_ope_time" property="lastOpeTime"/>
+        <result column="operation" property="operation"/>
     </resultMap>
 
     <insert id="insertTask" parameterType="com.cvte.todocenter.bean.Task" useGeneratedKeys="true" keyProperty="taskId">
@@ -23,7 +35,7 @@
         where task_id=#{taskId}
     </update>
     
-    <select id="selectTaskById" parameterType="int" resultType="com.cvte.todocenter.bean.Task">
+    <select id="selectTaskById" parameterType="int" resultMap="partTaskMap">
         select task_id,task_name,deadline from task
         where task_id=#{taskId} and is_delete!=1
     </select>
@@ -45,12 +57,12 @@
         where task_id=#{taskId}
     </update>
 
-    <select id="selectTaskByName" parameterType="java.lang.String" resultType="com.cvte.todocenter.bean.Task">
+    <select id="selectTaskByName" parameterType="java.lang.String" resultMap="partTaskMap">
         select task_id,task_name,deadline from task
         where task_name=#{taskName} and is_delete!=1
     </select>
 
-    <select id="selectAllDelTask" resultType="com.cvte.todocenter.bean.Task">
+    <select id="selectAllDelTask" resultMap="partTaskMap">
         select task_id,task_name,deadline from task
         where is_delete=1
     </select>
@@ -78,7 +90,7 @@
         where user_id=#{userId} and task_id=#{taskId}
     </update>
 
-    <select id="selectAllTaskUser" resultType="com.cvte.todocenter.bean.User" parameterType="int">
+    <select id="selectAllTaskUser" resultMap="userMap" parameterType="int">
         select user_id,user_name,email
         from user
         where user_id in

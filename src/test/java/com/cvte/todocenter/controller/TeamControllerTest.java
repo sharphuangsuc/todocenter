@@ -31,14 +31,13 @@ public class TeamControllerTest {
     }
 
     @Test
-    @Transactional
     public void addTeamUser()throws Exception {
         List<UserTeam> list=new ArrayList<>();
         UserTeam userTeam1=new UserTeam();
-        userTeam1.setTeamId(10);
+        userTeam1.setTeamId(14);
         userTeam1.setUserId(1);
         UserTeam userTeam2 =new UserTeam();
-        userTeam2.setTeamId(12);
+        userTeam2.setTeamId(14);
         userTeam2.setUserId(2);
         list.add(userTeam1);
         list.add(userTeam2);
@@ -48,7 +47,7 @@ public class TeamControllerTest {
             int teamId=userTeam.getTeamId();
             User user=userService.getUserById(userId);
             Team team=teamService.getTeamById(teamId);
-            if(user==null||team==null||user.getIsDelete()==1||team.getIsDelete()==1)
+            if(user==null||team==null)
             {
                 throw new Exception("团队或者成员不存在");
             }

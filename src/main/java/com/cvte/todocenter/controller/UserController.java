@@ -7,6 +7,7 @@ import com.cvte.todocenter.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @RestController
@@ -28,6 +29,11 @@ public class UserController {
     @ResponseBody
     public void addUser(User user)
     {
+        TimeController timeController=new TimeController();
+        Timestamp lastOpeTime=timeController.getTime();
+        String operation="add new user";
+        user.setLastOpeTime(lastOpeTime);
+        user.setOperation(operation);
         userService.addUser(user);
     }
 
@@ -35,13 +41,21 @@ public class UserController {
     @RequestMapping(value = "/del",method = {RequestMethod.POST})
     public void delUserById(@RequestParam int userId)
     {
-        userService.delUserById(userId);
+        TimeController timeController=new TimeController();
+        Timestamp lastOpeTime=timeController.getTime();
+        String operation="delete the user";
+        userService.delUserById(userId,lastOpeTime,operation);
     }
 
     //修改用户信息
     @RequestMapping(value = "/update",method = RequestMethod.POST)
     public void update(User user)
     {
+        TimeController timeController=new TimeController();
+        Timestamp lastOpeTime=timeController.getTime();
+        String operation="update the user";
+        user.setLastOpeTime(lastOpeTime);
+        user.setOperation(operation);
         userService.updateUserById(user);
     }
 
@@ -70,7 +84,10 @@ public class UserController {
     @RequestMapping("/delBatch")
     public void delBatch(List<Integer> delList)
     {
-        userService.delBatch(delList);
+        TimeController timeController=new TimeController();
+        Timestamp lastOpeTime=timeController.getTime();
+        String operation="delete the user";
+        userService.delBatch(delList,lastOpeTime,operation);
     }
 
     //获取用户所在团队

@@ -2,12 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cvte.todocenter.mapper.TeamMapper">
 
+    <resultMap id="userMap" type="com.cvte.todocenter.bean.User">
+        <id column="user_id" property="userId"/>
+        <result column="user_name" property="userName"/>
+        <result column="email" property="email"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="last_ope_time" property="lastOpeTime"/>
+        <result column="operation" property="operation"/>
+    </resultMap>
+
+    <resultMap id="teamMap" type="com.cvte.todocenter.bean.Team">
+        <id column="team_id" property="teamId"/>
+        <result column="team_name" property="teamName"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="last_ope_time" property="lastOpeTime"/>
+        <result column="operation" property="operation"/>
+    </resultMap>
+
     <insert id="insertTeam" parameterType="com.cvte.todocenter.bean.Team" useGeneratedKeys="true" keyProperty="teamId">
         insert into team(team_name,is_delete,last_ope_time,operation)
         values (#{teamName},0,#{lastOpeTime},#{operation})
     </insert>
 
-    <select id="selectAll" resultType="com.cvte.todocenter.bean.Team">
+    <select id="selectAll" resultMap="teamMap">
         select team_id,team_name from team
         where is_delete!=1
     </select>
@@ -17,7 +34,7 @@
         where team_id=#{teamId}
     </update>
 
-    <select id="selectTeamById" parameterType="int" resultType="com.cvte.todocenter.bean.Team">
+    <select id="selectTeamById" parameterType="int" resultMap="teamMap">
         select team_id,team_name from team
         where team_id=#{teamId} and is_delete!=1
     </select>
@@ -36,12 +53,12 @@
         </set>
     </update>
 
-    <select id="selectTeamByName" parameterType="java.lang.String" resultType="com.cvte.todocenter.bean.Team">
+    <select id="selectTeamByName" parameterType="java.lang.String" resultMap="teamMap">
         select teamId,teamName from team
         where team_name=#{teamName} and is_delete!=1
     </select>
 
-    <select id="selectAllDelTeam" resultType="com.cvte.todocenter.bean.Team">
+    <select id="selectAllDelTeam" resultMap="teamMap">
         select team_id,team_name from team
         where is_delete=1
     </select>
@@ -69,7 +86,7 @@
         where userId=#{userId} and teamId=#{teamId}
     </update>
 
-    <select id="selectAllTeamUser" resultType="com.cvte.todocenter.bean.User" parameterType="int">
+    <select id="selectAllTeamUser" resultMap="userMap" parameterType="int">
         select userId,userName,email
         from user
         where userId in

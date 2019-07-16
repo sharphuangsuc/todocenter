@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -21,9 +22,9 @@ public class UserService {
         userMapper.insertUser(user);
     }
 
-    public void delUserById(int userId)
+    public void delUserById(int userId, Timestamp lastOpeTime, String operation)
     {
-        userMapper.deleteUserById(userId);
+        userMapper.deleteUserById(userId,lastOpeTime,operation);
     }
 
     public void updateUserById(User user){
@@ -48,9 +49,9 @@ public class UserService {
         return userMapper.selectAllDelUser();
     }
 
-    public void delBatch(List<Integer> delList)
+    public void delBatch(List<Integer> delList, Timestamp lastOpeTime, String operation)
     {
-        userMapper.batchDeleteUser(delList);
+        userMapper.batchDeleteUser(delList,lastOpeTime,operation);
     }
 
     public List<Team> getUserTeamById(int userId)

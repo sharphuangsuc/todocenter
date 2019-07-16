@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.internet.InternetAddress;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -52,7 +53,7 @@ public class TaskController {
     {
         TimeController timeController=new TimeController();
         Timestamp lastOpeTime=timeController.getTime();
-        String operation="delete the taskm";
+        String operation="delete the task";
         taskService.delTaskById(taskId,lastOpeTime,operation);
     }
 
@@ -100,22 +101,25 @@ public class TaskController {
     }
 
     @RequestMapping(value= "/addUser",method = RequestMethod.POST)
-    @Transactional
     public void addTaskUser(@RequestParam("addUserList") List<UserTask> addUserList)throws Exception
     {
+        List<String> email=new ArrayList<>();
+        List<String> username=new ArrayList<>();
         for(UserTask userTask:addUserList)
         {
             int userId=userTask.getUserId();
             int taskId=userTask.getTaskId();
             User user=userService.getUserById(userId);
             Task task=taskService.getTaskById(taskId);
-            if(user==null||task==null||user.getIsDelete()==1||task.getIsDelete()==1)
+            if(user==null||task==null)
             {
                 throw new Exception("任务或者成员不存在");
             }
+            email.add(user.getEmail());
+            username.add(user.getUserName());
         }
         taskService.addTaskUser(addUserList);
-        InternetAddress[] internetAddresses=mailService.getAddress(addUserList);
+        InternetAddress[] internetAddresses=mailService.getAddress(email,username);
         Mail mail=new Mail();
         mail.setSendName("");
         mail.setSubject("");

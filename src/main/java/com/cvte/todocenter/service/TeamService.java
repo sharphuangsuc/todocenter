@@ -1,5 +1,6 @@
 package com.cvte.todocenter.service;
 
+import com.cvte.todocenter.bean.Task;
 import com.cvte.todocenter.bean.Team;
 import com.cvte.todocenter.bean.User;
 import com.cvte.todocenter.bean.UserTeam;
@@ -12,7 +13,6 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Service
-@Transactional
 public class TeamService {
 
     @Autowired

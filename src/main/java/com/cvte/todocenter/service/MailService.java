@@ -24,16 +24,16 @@ public class MailService {
     public String sendEmailPassword="123456";
     public String sendEmailSMTPHost="smtp.cvte.com";
     //获取邮件收件对象函数
-    public InternetAddress[] getAddress(List<UserTask> addUserList) throws IOException
+    public InternetAddress[] getAddress(List<String> email,List<String> userName) throws IOException
     {
-        InternetAddress[] internetAddressesList=new InternetAddress[addUserList.size()];
+        InternetAddress[] internetAddressesList=new InternetAddress[email.size()];
         for(int i=0;i<internetAddressesList.length;i++)
         {
-            int userId=addUserList.get(i).getUserId();
-            User user=userService.getUserById(userId);
-            String email=user.getEmail();
-            String userName=user.getUserName();
-            InternetAddress internetAddress=new InternetAddress(email,userName,"UTF-8");
+            //int userId=addUserList.get(i).getUserId();
+            //User user=userService.getUserById(userId);
+            //String email=user.getEmail();
+            //String userName=user.getUserName();
+            InternetAddress internetAddress=new InternetAddress(email.get(i),userName.get(i),"UTF-8");
             internetAddressesList[i]=internetAddress;
         }
         return  internetAddressesList;
@@ -41,18 +41,23 @@ public class MailService {
     //发送邮件函数
     public void sendMail(InternetAddress[] internetAddresses,Mail mail) throws Exception
     {
-        Properties properties=new Properties();
-        properties.setProperty("mail.transport.protocol", "smtp");
-        properties.setProperty("mail.smtp.host", sendEmailAccount);
-        properties.setProperty("mail.smtp.auth", "true");
-        Session session=Session.getInstance(properties);
-        session.setDebug(true);
-        MimeMessage mimeMessage=createMimeMessage(session,sendEmailAccount,internetAddresses,mail);
-        Transport transport=session.getTransport();
-        transport.connect(sendEmailAccount,sendEmailPassword);
-        transport.sendMessage(mimeMessage,mimeMessage.getAllRecipients());
-
-        transport.close();
+            Properties properties = new Properties();
+            properties.setProperty("mail.transport.protocol", "smtp");
+            properties.setProperty("mail.smtp.host", sendEmailAccount);
+            properties.setProperty("mail.smtp.auth", "true");
+            Session session = Session.getInstance(properties);
+            session.setDebug(true);
+            MimeMessage mimeMessage = createMimeMessage(session, sendEmailAccount, internetAddresses, mail);
+            Transport transport = session.getTransport();
+            transport.connect(sendEmailAccount, sendEmailPassword);
+            transport.sendMessage(mimeMessage, mimeMessage.getAllRecipients());
+            if(transport!=null) {
+                try {
+                    transport.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
     }
 
     //邮件创建函数

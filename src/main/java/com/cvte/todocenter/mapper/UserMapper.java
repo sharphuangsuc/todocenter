@@ -6,6 +6,7 @@ import com.cvte.todocenter.bean.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Mapper
@@ -14,7 +15,7 @@ public interface UserMapper {
 
     void insertUser(User user);
 
-    void deleteUserById(int userId);
+    void deleteUserById(int userId, Timestamp lastOpeTime, String operation);
 
     void updateUserById(User user);
 
@@ -26,7 +27,7 @@ public interface UserMapper {
 
     List<User> selectAllDelUser();
 
-    void batchDeleteUser(List<Integer> delList);
+    void batchDeleteUser(List<Integer> delList, Timestamp lastOpeTime, String operation);
 
     List<Team> selectAllUserTeam(int userId);
 

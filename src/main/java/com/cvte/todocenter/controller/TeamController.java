@@ -98,21 +98,21 @@ public class TeamController {
 
     //为团队指派用户
     @RequestMapping(value= "/addUser",method = RequestMethod.POST)
-    @Transactional
     public void addTeamUser(@RequestParam("addUserList") List<UserTeam> addUserList)throws Exception
     {
-        teamService.addTeamUser(addUserList);
+
         for(UserTeam userTeam:addUserList)
         {
             int userId=userTeam.getUserId();
             int teamId=userTeam.getTeamId();
             User user=userService.getUserById(userId);
             Team team=teamService.getTeamById(teamId);
-            if(user==null||team==null||user.getIsDelete()==1||team.getIsDelete()==1)
+            if(user==null||team==null)
             {
                 throw new Exception("团队或者成员不存在");
             }
         }
+        teamService.addTeamUser(addUserList);
     }
 
     //剔除团队成员

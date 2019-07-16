@@ -2,22 +2,48 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cvte.todocenter.mapper.UserMapper">
 
+    <resultMap id="userMap" type="com.cvte.todocenter.bean.User">
+        <id column="user_id" property="userId"/>
+        <result column="user_name" property="userName"/>
+        <result column="email" property="email"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="last_ope_time" property="lastOpeTime"/>
+        <result column="operation" property="operation"/>
+    </resultMap>
+
+    <resultMap id="teamMap" type="com.cvte.todocenter.bean.Team">
+        <id column="team_id" property="teamId"/>
+        <result column="team_name" property="teamName"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="last_ope_time" property="lastOpeTime"/>
+        <result column="operation" property="operation"/>
+    </resultMap>
+
+    <resultMap id="partTaskMap" type="com.cvte.todocenter.bean.Task">
+        <id column="task_id" property="taskId"/>
+        <result column="task_name" property="taskName"/>
+        <result column="deadline" property="deadline"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="last_ope_time" property="lastOpeTime"/>
+        <result column="operation" property="operation"/>
+    </resultMap>
+
     <insert id="insertUser" parameterType="com.cvte.todocenter.bean.User">
-        insert into user(user_name,email,is_delete)
-        values (#{userName},#{email},0)
+        insert into user(user_name,email,is_delete,last_ope_time,operation)
+        values (#{userName},#{email},0,#{lastOpeTime},#{operation})
     </insert>
 
-    <select id="selectAll" resultType="com.cvte.todocenter.bean.User">
+    <select id="selectAll" resultMap="userMap">
         select user_id,user_name,email from user
         where is_delete!=1
     </select>
 
     <update id="deleteUserById" parameterType="int">
-        update user set is_delete=1
+        update user set is_delete=1,last_ope_time=#{lastOpeTime},operation=#{operation}
         where user_id=#{userId}
     </update>
 
-    <select id="selectUserById" parameterType="int" resultType="com.cvte.todocenter.bean.User">
+    <select id="selectUserById" parameterType="int" resultMap="userMap">
         select user_id,user_name,email from user
         where user_id=#{userId} and is_delete!=1
     </select>
@@ -34,16 +60,17 @@
         <if test="isDelete!=null">
         is_delete=#{isDelete}
         </if>
+            last_ope_time=#{lastOpeTime},operation=#{operation}
         where user_id=#{userId}
         </set>
     </update>
 
-    <select id="selectUserByName" parameterType="java.lang.String" resultType="com.cvte.todocenter.bean.User">
+    <select id="selectUserByName" parameterType="java.lang.String" resultMap="userMap">
         select user_id,user_name,email from user
         where user_name=#{userName} and is_delete!=1
     </select>
 
-    <select id="selectAllDelUser" resultType="com.cvte.todocenter.bean.User">
+    <select id="selectAllDelUser" resultMap="userMap">
         select user_id,user_name,email from user
         where is_delete=1
     </select>
@@ -52,20 +79,20 @@
         <foreach collection="list" item="item" index="index" separator=";">
             update user
             <set>
-                is_delete=1
+                is_delete=1,last_ope_time=#{lastOpeTime},operation=#{operation}
             </set>
             where user_id=${item}
         </foreach>
     </update>
 
-    <select id="selectAllUserTeam" resultType="com.cvte.todocenter.bean.Team" parameterType="int">
+    <select id="selectAllUserTeam" resultMap="teamMap" parameterType="int">
         select team_id,team_name
         from team
         where team_id in
         (select team_id from user_team where user_id=#{userId})
     </select>
 
-    <select id="selectAllUserTask" resultType="com.cvte.todocenter.bean.Task" parameterType="int">
+    <select id="selectAllUserTask" resultMap="partTaskMap" parameterType="int">
         select task_id,task_name,deadline
         from task
         where task_id in
