@@ -1,5 +1,11 @@
 server:
   port: 8080
+  tomcat:
+    max-threads: 2000
+    max-connections: 20000
+  connection-timeout: 30000
+
+
 
 spring:
   datasource:
@@ -7,6 +13,8 @@ spring:
     url: jdbc:mysql://sr-dev-mysql-master-1.gz.cvte.cn:3306/todo_center
     username: sharphuang
     password: sharphuang
+    hikari:
+      maximum-pool-size: 50
 
 mybatis:
   type-aliases-package: com.cvte.todocenter.bean

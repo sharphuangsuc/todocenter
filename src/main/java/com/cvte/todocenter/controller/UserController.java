@@ -97,7 +97,7 @@ public class UserController {
         return userService.getUserTeamById(userId);
     }
 
-    //获取用户所在团队
+    //获取用户所承担的任务
     @RequestMapping("/getTaskUser")
     public List<Task> getUserTaskById(@RequestParam int userId)
     {

@@ -8,16 +8,17 @@ import com.cvte.todocenter.service.MailService;
 import com.cvte.todocenter.service.TaskService;
 import com.cvte.todocenter.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.*;
-
 import javax.mail.internet.InternetAddress;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 @RestController
 @RequestMapping("/task")
+@EnableAsync
 public class TaskController {
 
     @Autowired
@@ -100,32 +101,65 @@ public class TaskController {
         taskService.delBatch(delList,lastOpeTime,operation);
     }
 
+    @RequestMapping(value ="/test")
+    public void test(){
+        return;
+    }
     @RequestMapping(value= "/addUser",method = RequestMethod.POST)
-    public void addTaskUser(@RequestParam("addUserList") List<UserTask> addUserList)throws Exception
+    public void addTaskUser(@RequestBody List<UserTask> addUserList)throws Exception
     {
-        List<String> email=new ArrayList<>();
-        List<String> username=new ArrayList<>();
-        for(UserTask userTask:addUserList)
+        List<User> userList=new ArrayList<>();
+        int len=addUserList.size();
+        for(int i=0;i<len;i++)
         {
-            int userId=userTask.getUserId();
-            int taskId=userTask.getTaskId();
+            int userId=addUserList.get(i).getUserId();
+            int taskId=addUserList.get(i).getTaskId();
             User user=userService.getUserById(userId);
             Task task=taskService.getTaskById(taskId);
             if(user==null||task==null)
             {
                 throw new Exception("任务或者成员不存在");
             }
-            email.add(user.getEmail());
-            username.add(user.getUserName());
+            userList.add(user);
         }
         taskService.addTaskUser(addUserList);
-        InternetAddress[] internetAddresses=mailService.getAddress(email,username);
-        Mail mail=new Mail();
+        mailService.sendMailTest();
+        //Thread.sleep(1000);
+        /*Mail mail=new Mail();
         mail.setSendName("");
         mail.setSubject("");
         mail.setText("");
-        mailService.sendMail(internetAddresses,mail);
+        mailService.sendMail(userList,mail);*/
     }
+
+    /*@RequestMapping(value= "/addUser",method = RequestMethod.POST)
+    public void addTaskUser(@RequestBody List<UserTask> addUserList) throws Exception {
+
+        List<User> userList=new ArrayList<>();
+        int len=addUserList.size();
+        for(int i=0;i<len;i++)
+        {
+            int userId=addUserList.get(i).getUserId();
+            int taskId=addUserList.get(i).getTaskId();
+            User user=userService.getUserById(userId);
+            Task task=taskService.getTaskById(taskId);
+            if(user==null||task==null)
+            {
+                throw new Exception("任务或者成员不存在");
+            }
+            userList.add(user);
+        }
+        taskService.addTaskUser(addUserList);
+        Callable<String> callable=new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                mailService.sendMailTest();
+                return null;
+            }
+        };
+        callable.call();
+    }*/
+
 
     //撤除任务的执行人员
     @RequestMapping(value = "/delUserTask",method = {RequestMethod.POST})
