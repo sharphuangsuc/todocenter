@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.*;
 import javax.mail.internet.InternetAddress;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -106,8 +107,7 @@ public class TaskController {
         return;
     }
     @RequestMapping(value= "/addUser",method = RequestMethod.POST)
-    public void addTaskUser(@RequestBody List<UserTask> addUserList)throws Exception
-    {
+    public void addTaskUser(@RequestBody List<UserTask> addUserList) throws SQLException, InterruptedException {
         List<User> userList=new ArrayList<>();
         int len=addUserList.size();
         for(int i=0;i<len;i++)
@@ -118,7 +118,7 @@ public class TaskController {
             Task task=taskService.getTaskById(taskId);
             if(user==null||task==null)
             {
-                throw new Exception("任务或者成员不存在");
+                throw new SQLException("任务或者成员不存在");
             }
             userList.add(user);
         }
